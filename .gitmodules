@@ -1,0 +1,4 @@
+[submodule "open-feature-schemas"]
+	path = open-feature-schemas
+	url = https://github.com/open-feature/schemas.git
+	branch = tags/protobuf-v0.2.10
