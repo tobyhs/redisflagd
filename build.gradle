@@ -10,6 +10,10 @@ plugins {
 version = "0.1"
 group = "io.github.tobyhs.redisflagd"
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 repositories {
     mavenCentral()
 }
