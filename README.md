@@ -1,10 +1,3 @@
-## Micronaut 3.8.5 Documentation
+# RedisFlagd
 
-- [User Guide](https://docs.micronaut.io/3.8.5/guide/index.html)
-- [API Reference](https://docs.micronaut.io/3.8.5/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/3.8.5/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
-
-- [Protobuf Gradle Plugin](https://plugins.gradle.org/plugin/com.google.protobuf)
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
+In-progress implementation of Flagd's [FlagSyncService gRPC interface](https://github.com/open-feature/schemas/blob/main/protobuf/sync/v1/sync_service.proto) using Redis.
