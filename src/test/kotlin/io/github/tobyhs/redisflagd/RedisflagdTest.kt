@@ -2,7 +2,7 @@ package io.github.tobyhs.redisflagd
 
 import io.kotest.core.spec.style.StringSpec
 import io.micronaut.runtime.EmbeddedApplication
-import io.micronaut.test.extensions.kotest.annotation.MicronautTest
+import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
 
 @MicronautTest
 class RedisflagdTest(private val application: EmbeddedApplication<*>): StringSpec({

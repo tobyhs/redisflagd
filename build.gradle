@@ -82,7 +82,7 @@ protobuf {
 }
 
 micronaut {
-    testRuntime("kotest")
+    testRuntime("kotest5")
     processing {
         incremental(true)
         annotations("io.github.tobyhs.redisflagd.*")
