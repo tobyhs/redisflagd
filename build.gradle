@@ -33,6 +33,8 @@ dependencies {
     implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
+
+    testImplementation "io.kotest:kotest-assertions-json-jvm:5.+"
 }
 
 
