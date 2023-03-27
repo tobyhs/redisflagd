@@ -46,8 +46,10 @@ class RedisFlagsRepositoryTest : DescribeSpec({
     fun checkFlagConfiguration(flagConfiguration: String) {
         flagConfiguration.shouldEqualJson(
                 """{
-                    "flag1": {"state":"ENABLED","variants":{"on":true,"off":false},"defaultVariant":"on"},
-                    "flag2": {"state":"ENABLED","variants":{"one":1,"two":2},"defaultVariant":"one"}
+                    "flags": {
+                        "flag1": {"state":"ENABLED","variants":{"on":true,"off":false},"defaultVariant":"on"},
+                        "flag2": {"state":"ENABLED","variants":{"one":1,"two":2},"defaultVariant":"one"}
+                    }
                 }"""
         )
     }
@@ -93,8 +95,8 @@ class RedisFlagsRepositoryTest : DescribeSpec({
         it("refreshes the flag configuration and returns it") {
             repository.getFlagConfiguration()
             every { redisCoroutines.hgetall(RedisFlagsRepository.FLAGS_KEY) } returns flowOf()
-            repository.refreshFlagConfiguration().shouldEqualJson("{}")
-            repository.getFlagConfiguration().shouldEqualJson("{}")
+            repository.refreshFlagConfiguration().shouldEqualJson("""{"flags":{}}""")
+            repository.getFlagConfiguration().shouldEqualJson("""{"flags":{}}""")
             verify(exactly = 2) { redisCoroutines.hgetall(RedisFlagsRepository.FLAGS_KEY) }
         }
     }

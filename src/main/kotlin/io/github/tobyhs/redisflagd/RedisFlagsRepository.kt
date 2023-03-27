@@ -29,13 +29,14 @@ class RedisFlagsRepository(
 
     override suspend fun refreshFlagConfiguration(): String {
         val keyValuePairs = redisConnection.coroutines().hgetall(FLAGS_KEY).toList()
-        val newConfiguration = buildString {
+        var newConfiguration = buildString {
             // This isn't proper, but JSON parsing each key-value pair and then JSON dumping everything back out felt
             // wasteful
             keyValuePairs.joinTo(this, separator = ",", prefix = "{", postfix = "}") { kv ->
                 """"${kv.key}":${kv.value}"""
             }
         }
+        newConfiguration = """{"flags":${newConfiguration}}"""
         _flagConfiguration = newConfiguration
         return newConfiguration
     }
