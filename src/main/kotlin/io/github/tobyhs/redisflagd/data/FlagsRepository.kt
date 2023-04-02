@@ -1,4 +1,4 @@
-package io.github.tobyhs.redisflagd
+package io.github.tobyhs.redisflagd.data
 
 /**
  * Repository to retrieve flag configuration

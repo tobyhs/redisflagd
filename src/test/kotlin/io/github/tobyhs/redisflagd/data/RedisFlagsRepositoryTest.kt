@@ -1,4 +1,4 @@
-package io.github.tobyhs.redisflagd
+package io.github.tobyhs.redisflagd.data
 
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.common.ExperimentalKotest

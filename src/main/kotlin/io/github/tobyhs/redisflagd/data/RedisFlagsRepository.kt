@@ -1,4 +1,4 @@
-package io.github.tobyhs.redisflagd
+package io.github.tobyhs.redisflagd.data
 
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.api.StatefulRedisConnection
