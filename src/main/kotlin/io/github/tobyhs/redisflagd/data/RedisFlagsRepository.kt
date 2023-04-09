@@ -11,7 +11,6 @@ import kotlinx.coroutines.sync.withLock
 /**
  * Implementation of [FlagsRepository] that stores the flag configuration in a Redis hash
  */
-@ExperimentalLettuceCoroutinesApi
 @Singleton
 class RedisFlagsRepository(
         private val redisConnection: StatefulRedisConnection<String, String>,
@@ -19,6 +18,7 @@ class RedisFlagsRepository(
 ) : FlagsRepository {
     private var _flagConfiguration: String? = null
 
+    @ExperimentalLettuceCoroutinesApi
     override suspend fun getFlagConfiguration(): String {
         _flagConfiguration?.let { return it }
         mutex.withLock {
@@ -27,6 +27,7 @@ class RedisFlagsRepository(
         }
     }
 
+    @ExperimentalLettuceCoroutinesApi
     override suspend fun refreshFlagConfiguration(): String {
         val keyValuePairs = redisConnection.coroutines().hgetall(FLAGS_KEY).toList()
         var newConfiguration = buildString {
