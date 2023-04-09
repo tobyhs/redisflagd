@@ -5,7 +5,7 @@ import io.micronaut.context.annotation.Prototype
 import kotlinx.coroutines.sync.Mutex
 
 @Factory
-class MutexFactory {
+internal class MutexFactory {
     @Prototype
     fun mutex(): Mutex = Mutex()
 }
