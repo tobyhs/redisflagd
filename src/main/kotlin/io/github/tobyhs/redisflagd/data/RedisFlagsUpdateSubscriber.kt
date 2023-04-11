@@ -1,7 +1,9 @@
 package io.github.tobyhs.redisflagd.data
 
 import io.github.tobyhs.redisflagd.di.AppCoroutineScope
+import io.lettuce.core.RedisURI
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
+import io.micronaut.context.annotation.Property
 import jakarta.annotation.PostConstruct
 import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +20,7 @@ import sync.v1.SyncService.SyncFlagsResponse
 class RedisFlagsUpdateSubscriber(
         private val flagsRepository: FlagsRepository,
         private val pubSubConnection: StatefulRedisPubSubConnection<String, String>,
+        @Property(name = "redis.uri") private val redisUri: String,
         @AppCoroutineScope private val appScope: CoroutineScope,
 ) : FlagsUpdateSubscriber {
     private val _flow = MutableSharedFlow<SyncFlagsResponse>()
@@ -38,6 +41,7 @@ class RedisFlagsUpdateSubscriber(
                 _flow.emit(response)
             }
         }
-        pubSubConnection.async().psubscribe("__keyspace@*__:${RedisFlagsRepository.FLAGS_KEY}")
+        val db = RedisURI.create(redisUri).database
+        pubSubConnection.async().subscribe("__keyspace@${db}__:${RedisFlagsRepository.FLAGS_KEY}")
     }
 }

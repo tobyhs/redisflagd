@@ -21,6 +21,7 @@ import sync.v1.SyncService.SyncFlagsResponse
 class RedisFlagsUpdateSubscriberTest : DescribeSpec({
     lateinit var flagsRepository: FlagsRepository
     lateinit var pubSubConnection: StatefulRedisPubSubConnection<String, String>
+    val redisUri = "redis://test-redis:6379/2"
     lateinit var subscriber: RedisFlagsUpdateSubscriber
 
     beforeEach {
@@ -34,7 +35,7 @@ class RedisFlagsUpdateSubscriberTest : DescribeSpec({
             every { pubSubConnection.addListener(any<PushListener>()) } answers { listeners.add(firstArg()) }
             val asyncCommands: RedisPubSubAsyncCommands<String, String> = mockk()
             every { pubSubConnection.async() } returns asyncCommands
-            every { asyncCommands.psubscribe(any()) } answers { mockk() }
+            every { asyncCommands.subscribe(any()) } answers { mockk() }
             val flagConfiguration = """
                 {
                     "flags": {
@@ -43,14 +44,14 @@ class RedisFlagsUpdateSubscriberTest : DescribeSpec({
                 }""".trimIndent()
             coEvery { flagsRepository.refreshFlagConfiguration() } returns flagConfiguration
 
-            subscriber = RedisFlagsUpdateSubscriber(flagsRepository, pubSubConnection, this)
+            subscriber = RedisFlagsUpdateSubscriber(flagsRepository, pubSubConnection, redisUri, this)
             val responses = mutableListOf<SyncFlagsResponse>()
             val flowCollectJob = launch {
                 subscriber.flow.collect { r -> responses.add(r) }
             }
 
             subscriber.subscribe()
-            verify { asyncCommands.psubscribe("__keyspace@*__:${RedisFlagsRepository.FLAGS_KEY}") }
+            verify { asyncCommands.subscribe("__keyspace@2__:${RedisFlagsRepository.FLAGS_KEY}") }
             listeners.shouldHaveSize(1)
             listeners.first().onPushMessage(mockk())
             testCoroutineScheduler.advanceUntilIdle()
