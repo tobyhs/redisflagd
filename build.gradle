@@ -35,6 +35,9 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
 
     testImplementation "io.kotest:kotest-assertions-json-jvm:5.+"
+
+    testImplementation "com.redis.testcontainers:testcontainers-redis:1.6.4"
+    testImplementation "org.testcontainers:testcontainers:1.18.0"
 }
 
 
