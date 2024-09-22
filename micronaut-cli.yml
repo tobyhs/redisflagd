@@ -3,4 +3,4 @@ defaultPackage: io.github.tobyhs.redisflagd
 testFramework: kotest
 sourceLanguage: kotlin
 buildTool: gradle
-features: [annotation-api, app-name, gradle, grpc, jackson-databind, kotest, kotlin, kotlin-application, kotlin-build, logback, micronaut-build, readme, redis-lettuce, shade, yaml]
+features: [app-name, discovery-core, graalvm, gradle, grpc, http-client-test, kotest, kotlin, kotlin-application, ksp, logback, micronaut-build, properties, readme, redis-lettuce, serialization-jackson, shade]

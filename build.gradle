@@ -1,10 +1,10 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "$kotlinVersion"
-    id("org.jetbrains.kotlin.kapt") version "$kotlinVersion"
     id("org.jetbrains.kotlin.plugin.allopen") version "$kotlinVersion"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.7.2"
-    id("com.google.protobuf") version "0.8.15"
+    id("com.google.devtools.ksp") version "1.9.25-1.0.20"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.4.2"
+    id("com.google.protobuf") version "0.9.2"
 }
 
 version = "0.1"
@@ -24,17 +24,17 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$kotlinCoroutinesVersion"
 
-    implementation "io.micronaut.grpc:micronaut-grpc-runtime:3.5.0"
-    implementation "io.micronaut.kotlin:micronaut-kotlin-runtime:3.2.2"
-    implementation "io.micronaut.redis:micronaut-redis-lettuce:5.3.2"
+    implementation "io.micronaut.grpc:micronaut-grpc-runtime:4.+"
+    implementation "io.micronaut.kotlin:micronaut-kotlin-runtime:4.+"
+    implementation "io.micronaut.redis:micronaut-redis-lettuce:6.+"
 
-    implementation "jakarta.annotation:jakarta.annotation-api:2.1.0"
+    implementation "jakarta.annotation:jakarta.annotation-api:3.+"
 
     implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
 
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
+    runtimeOnly "ch.qos.logback:logback-classic:1.+"
 
-    testImplementation "io.kotest:kotest-assertions-json-jvm:5.+"
+    testImplementation "io.kotest:kotest-assertions-json:5.+"
 
     testImplementation "com.redis.testcontainers:testcontainers-redis:1.6.4"
     testImplementation "org.testcontainers:testcontainers:1.18.0"
@@ -42,11 +42,11 @@ dependencies {
 
 
 application {
-    mainClass.set("io.github.tobyhs.redisflagd.ApplicationKt")
+    mainClass = "io.github.tobyhs.redisflagd.ApplicationKt"
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("21")
 }
 
 sourceSets {
@@ -60,9 +60,9 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.21.12" }
+    protoc { artifact = "com.google.protobuf:protoc:3.25.4" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.51.1" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.66.0" }
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
     }
     generateProtoTasks {
@@ -79,4 +79,8 @@ micronaut {
         incremental(true)
         annotations("io.github.tobyhs.redisflagd.*")
     }
+}
+
+tasks.named("dockerfileNative") {
+    jdkVersion = "21"
 }
