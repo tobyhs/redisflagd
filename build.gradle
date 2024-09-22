@@ -45,8 +45,10 @@ application {
     mainClass = "io.github.tobyhs.redisflagd.ApplicationKt"
 }
 
+final javaVersion = rootProject.file(".java-version").readLines().first.strip()
+
 java {
-    sourceCompatibility = JavaVersion.toVersion("21")
+    sourceCompatibility = JavaVersion.toVersion(javaVersion)
 }
 
 sourceSets {
@@ -82,5 +84,5 @@ micronaut {
 }
 
 tasks.named("dockerfileNative") {
-    jdkVersion = "21"
+    jdkVersion = javaVersion
 }

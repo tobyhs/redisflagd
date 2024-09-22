@@ -8,7 +8,7 @@ RedisFlagd relies on Redis [keyspace notifications](https://redis.io/docs/manual
 
 ## Building a container image
 
-To build a container image, you need Docker and a Java development kit (version 17 or greater) installed. Run:
+To build a container image, you need Docker and a Java development kit (version 21) installed. Run:
 ```sh
 ./gradlew dockerBuildNative
 ```
