@@ -1,6 +1,6 @@
 # RedisFlagd
 
-RedisFlagd is an implementation of Flagd's [FlagSyncService gRPC interface](https://github.com/open-feature/schemas/blob/main/protobuf/sync/v1/sync_service.proto) that uses Redis to store flag configurations.
+RedisFlagd is an implementation of Flagd's [FlagSyncService gRPC interface](https://github.com/open-feature/flagd-schemas/blob/main/protobuf/flagd/sync/v1/sync.proto) that uses Redis to store flag configurations.
 
 Flag configurations are stored in a Redis hash with key `flagd:flags`. The field is the name of the feature flag and the value is its configuration (e.g. `{"state": "ENABLED", "variants": {"on": true, "off": false}, "defaultVariant": "on"}`).
 
