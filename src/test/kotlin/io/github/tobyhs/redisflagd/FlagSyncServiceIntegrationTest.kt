@@ -1,6 +1,10 @@
 package io.github.tobyhs.redisflagd
 
 import com.redis.testcontainers.RedisContainer
+import dev.openfeature.flagd.grpc.sync.FlagSyncServiceGrpcKt
+import dev.openfeature.flagd.grpc.sync.Sync.FetchAllFlagsRequest
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsRequest
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import io.github.tobyhs.redisflagd.data.RedisFlagsRepository
 import io.grpc.ManagedChannel
 import io.kotest.assertions.fail
@@ -8,7 +12,6 @@ import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.lettuce.core.api.StatefulRedisConnection
 import io.lettuce.core.api.sync.RedisCommands
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -18,11 +21,6 @@ import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import sync.v1.FlagSyncServiceGrpcKt
-import sync.v1.SyncService
-import sync.v1.SyncService.FetchAllFlagsRequest
-import sync.v1.SyncService.SyncFlagsRequest
-import sync.v1.SyncService.SyncFlagsResponse
 
 @Tags("Integration")
 @MicronautTest
@@ -53,11 +51,9 @@ class FlagSyncServiceIntegrationTest : TestPropertyProvider, DescribeSpec({
             delayUntil { responses.size == 2 }
 
             responses[0].flagConfiguration.shouldEqualJson("""{"flags": {"flag1": ${flag1Value}}}""")
-            responses[0].state.shouldBe(SyncService.SyncState.SYNC_STATE_ALL)
             responses[1].flagConfiguration.shouldEqualJson(
                     """{"flags": {"flag1": ${flag1Value}, "flag2": ${flag2Value}}}"""
             )
-            responses[1].state.shouldBe(SyncService.SyncState.SYNC_STATE_ALL)
             flowCollectJob.cancel()
         }
     }

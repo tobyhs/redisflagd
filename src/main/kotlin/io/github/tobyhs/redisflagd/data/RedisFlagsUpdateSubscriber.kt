@@ -1,5 +1,6 @@
 package io.github.tobyhs.redisflagd.data
 
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import io.github.tobyhs.redisflagd.di.AppCoroutineScope
 import io.lettuce.core.RedisURI
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
@@ -10,8 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import sync.v1.SyncService
-import sync.v1.SyncService.SyncFlagsResponse
 
 /**
  * @see subscribe
@@ -34,10 +33,7 @@ class RedisFlagsUpdateSubscriber(
         pubSubConnection.addListener {
             appScope.launch {
                 val flagConfiguration = flagsRepository.refreshFlagConfiguration()
-                val response = SyncFlagsResponse.newBuilder()
-                        .setFlagConfiguration(flagConfiguration)
-                        .setState(SyncService.SyncState.SYNC_STATE_ALL)
-                        .build()
+                val response = SyncFlagsResponse.newBuilder().setFlagConfiguration(flagConfiguration).build()
                 _flow.emit(response)
             }
         }

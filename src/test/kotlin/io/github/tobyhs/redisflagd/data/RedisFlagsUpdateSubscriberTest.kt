@@ -1,5 +1,6 @@
 package io.github.tobyhs.redisflagd.data
 
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -14,8 +15,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import sync.v1.SyncService
-import sync.v1.SyncService.SyncFlagsResponse
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class, ExperimentalKotest::class)
 class RedisFlagsUpdateSubscriberTest : DescribeSpec({
@@ -59,7 +58,6 @@ class RedisFlagsUpdateSubscriberTest : DescribeSpec({
             responses.shouldHaveSize(1)
             val response = responses.first()
             response.flagConfiguration.shouldBe(flagConfiguration)
-            response.state.shouldBe(SyncService.SyncState.SYNC_STATE_ALL)
             flowCollectJob.cancel()
         }
     }

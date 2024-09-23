@@ -1,7 +1,7 @@
 package io.github.tobyhs.redisflagd.data
 
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import kotlinx.coroutines.flow.SharedFlow
-import sync.v1.SyncService.SyncFlagsResponse
 
 /**
  * Something that subscribes to flag configuration updates

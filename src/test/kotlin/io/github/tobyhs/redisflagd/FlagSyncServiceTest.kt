@@ -1,5 +1,8 @@
 package io.github.tobyhs.redisflagd
 
+import dev.openfeature.flagd.grpc.sync.Sync.FetchAllFlagsRequest
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsRequest
+import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import io.github.tobyhs.redisflagd.data.FlagsRepository
 import io.github.tobyhs.redisflagd.data.FlagsUpdateSubscriber
 import io.kotest.assertions.json.shouldEqualJson
@@ -14,10 +17,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import sync.v1.SyncService
-import sync.v1.SyncService.FetchAllFlagsRequest
-import sync.v1.SyncService.SyncFlagsRequest
-import sync.v1.SyncService.SyncFlagsResponse
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalKotest::class, ExperimentalStdlibApi::class)
 class FlagSyncServiceTest : DescribeSpec({
@@ -51,16 +50,12 @@ class FlagSyncServiceTest : DescribeSpec({
                         "myflag": {"state": "ENABLED", "variants": {"on": true, "off": false}, "defaultVariant": "on"}
                     }
                 }""".trimIndent()
-            val nextResponse = SyncFlagsResponse.newBuilder()
-                    .setFlagConfiguration(nextFlagConfiguration)
-                    .setState(SyncService.SyncState.SYNC_STATE_ALL)
-                    .build()
+            val nextResponse = SyncFlagsResponse.newBuilder().setFlagConfiguration(nextFlagConfiguration).build()
             updateFlow.emit(nextResponse)
             testCoroutineScheduler.advanceUntilIdle()
 
             responses.shouldHaveSize(2)
             responses[0].flagConfiguration.shouldEqualJson(initialFlagConfiguration)
-            responses[0].state.shouldBe(SyncService.SyncState.SYNC_STATE_ALL)
             responses[1].shouldBe(nextResponse)
             flowCollectJob.cancel()
         }
