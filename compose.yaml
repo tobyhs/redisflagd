@@ -1,0 +1,28 @@
+name: redisflagd
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: /etc/redis.conf
+    volumes:
+      - type: bind
+        source: ./compose/redis.conf
+        target: /etc/redis.conf
+        read_only: true
+
+  redisflagd:
+    image: redisflagd:latest
+    # The image should be built with `./gradlew dockerBuildNative`
+    pull_policy: never
+    depends_on:
+      - redis
+    environment:
+      REDIS_URI: redis://redis
+
+  flagd:
+    image: ghcr.io/open-feature/flagd:v0.11.2
+    command: start --uri grpc://redisflagd:50051
+    ports:
+      - "8013:8013"
+    depends_on:
+      - redisflagd

@@ -65,7 +65,7 @@ class FlagSyncServiceIntegrationTest : TestPropertyProvider, DescribeSpec({
         }
     }
 }) {
-    private val redisContainer: RedisContainer = RedisContainer(RedisContainer.DEFAULT_IMAGE_NAME.withTag("7.0-alpine"))
+    private val redisContainer: RedisContainer = RedisContainer(RedisContainer.DEFAULT_IMAGE_NAME.withTag("7-alpine"))
             .withKeyspaceNotifications()
 
     @Inject
