@@ -4,7 +4,7 @@ RedisFlagd is an implementation of Flagd's [FlagSyncService gRPC interface](http
 
 Flag configurations are stored in a Redis hash with key `flagd:flags`. The field is the name of the feature flag and the value is its configuration (e.g. `{"state": "ENABLED", "variants": {"on": true, "off": false}, "defaultVariant": "on"}`).
 
-RedisFlagd relies on Redis [keyspace notifications](https://redis.io/docs/manual/keyspace-notifications/) to notify it of updates. Your Redis server should be configured with a `notify-keyspace-events` of at least `Kh`.
+RedisFlagd relies on Redis [keyspace notifications](https://redis.io/docs/latest/develop/use/keyspace-notifications/) to notify it of updates. Your Redis server should be configured with a `notify-keyspace-events` of at least `Kh`.
 
 ## Configuration
 
