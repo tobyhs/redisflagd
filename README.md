@@ -6,14 +6,7 @@ Flag configurations are stored in a Redis hash with key `flagd:flags`. The field
 
 RedisFlagd relies on Redis [keyspace notifications](https://redis.io/docs/manual/keyspace-notifications/) to notify it of updates. Your Redis server should be configured with a `notify-keyspace-events` of at least `Kh`.
 
-## Building a container image
-
-To build a container image, you need Docker and a Java development kit (version 21) installed. Run:
-```sh
-./gradlew dockerBuildNative
-```
-
-## Environment Variables
+## Configuration
 
 You can configure RedisFlagd via the following environment variables:
 
@@ -21,6 +14,22 @@ You can configure RedisFlagd via the following environment variables:
 | --- | --- |
 | `REDIS_URI` | URI of Redis server with your flag configurations, e.g. `redis://flagd-redis.production:6379` |
 | `GRPC_SERVER_PORT` | port for gRPC server to listen on; defaults to 50051 |
+
+## Development
+
+To work on RedisFlagd, you should have a JDK installed. See the [.java-version](.java-version) file for the major version of Java to use.
+
+To run RedisFlagd from the command line, run:
+```sh
+./gradlew run
+```
+
+To build a container image using GraalVM Native Image, run:
+```sh
+./gradlew dockerBuildNative
+```
+
+There is a [Docker Compose file](compose.yaml) that runs Redis, RedisFlagd, and flagd for development/testing purposes.
 
 ## Running tests
 
