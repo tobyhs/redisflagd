@@ -3,12 +3,9 @@ name: redisflagd
 services:
   redis:
     image: redis:7-alpine
-    command: /etc/redis.conf
-    volumes:
-      - type: bind
-        source: ./compose/redis.conf
-        target: /etc/redis.conf
-        read_only: true
+    command: redis-server /redis_conf
+    configs:
+      - redis_conf
 
   redisflagd:
     image: redisflagd:latest
@@ -26,3 +23,8 @@ services:
       - "8013:8013"
     depends_on:
       - redisflagd
+
+configs:
+  redis_conf:
+    content: |
+      notify-keyspace-events Kh
