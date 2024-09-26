@@ -6,6 +6,10 @@ Flag configurations are stored in a Redis hash with key `flagd:flags`. The field
 
 RedisFlagd relies on Redis [keyspace notifications](https://redis.io/docs/latest/develop/use/keyspace-notifications/) to notify it of updates. Your Redis server should be configured with a `notify-keyspace-events` of at least `Kh`.
 
+## Container Image
+
+A container image is pushed to [GitHub Packages](https://github.com/tobyhs/redisflagd/pkgs/container/redisflagd) at ghcr.io/tobyhs/redisflagd:latest after a release is published.
+
 ## Configuration
 
 You can configure RedisFlagd via the following environment variables:
