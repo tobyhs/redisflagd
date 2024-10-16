@@ -10,7 +10,6 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -36,7 +35,7 @@ class FlagSyncServiceTest : DescribeSpec({
 
     describe("syncFlags").config(coroutineTestScope = true) {
         it("returns a flow that emits flag updates") {
-            val updateFlow = MutableSharedFlow<SyncFlagsResponse>()
+            val updateFlow = MutableSharedFlow<String>()
             every { flagsUpdateSubscriber.flow } returns updateFlow
             val responses = mutableListOf<SyncFlagsResponse>()
             val flowCollectJob = launch {
@@ -50,13 +49,12 @@ class FlagSyncServiceTest : DescribeSpec({
                         "myflag": {"state": "ENABLED", "variants": {"on": true, "off": false}, "defaultVariant": "on"}
                     }
                 }""".trimIndent()
-            val nextResponse = SyncFlagsResponse.newBuilder().setFlagConfiguration(nextFlagConfiguration).build()
-            updateFlow.emit(nextResponse)
+            updateFlow.emit(nextFlagConfiguration)
             testCoroutineScheduler.advanceUntilIdle()
 
             responses.shouldHaveSize(2)
             responses[0].flagConfiguration.shouldEqualJson(initialFlagConfiguration)
-            responses[1].shouldBe(nextResponse)
+            responses[1].flagConfiguration.shouldEqualJson(nextFlagConfiguration)
             flowCollectJob.cancel()
         }
     }

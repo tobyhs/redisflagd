@@ -1,6 +1,5 @@
 package io.github.tobyhs.redisflagd.data
 
-import dev.openfeature.flagd.grpc.sync.Sync.SyncFlagsResponse
 import io.github.tobyhs.redisflagd.di.AppCoroutineScope
 import io.lettuce.core.RedisURI
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
@@ -22,8 +21,8 @@ class RedisFlagsUpdateSubscriber(
         @Property(name = "redis.uri") private val redisUri: String,
         @AppCoroutineScope private val appScope: CoroutineScope,
 ) : FlagsUpdateSubscriber {
-    private val _flow = MutableSharedFlow<SyncFlagsResponse>()
-    override val flow: SharedFlow<SyncFlagsResponse> = _flow
+    private val _flow = MutableSharedFlow<String>()
+    override val flow: SharedFlow<String> = _flow
 
     /**
      * Subscribes to the Redis keyspace notification channels for flag configuration updates
@@ -32,9 +31,7 @@ class RedisFlagsUpdateSubscriber(
     fun subscribe() {
         pubSubConnection.addListener {
             appScope.launch {
-                val flagConfiguration = flagsRepository.refreshFlagConfiguration()
-                val response = SyncFlagsResponse.newBuilder().setFlagConfiguration(flagConfiguration).build()
-                _flow.emit(response)
+                _flow.emit(flagsRepository.refreshFlagConfiguration())
             }
         }
         val db = RedisURI.create(redisUri).database

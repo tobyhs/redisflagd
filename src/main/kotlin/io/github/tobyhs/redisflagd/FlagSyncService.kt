@@ -12,6 +12,7 @@ import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Implementation of flagd's FlagSyncService that uses Redis
@@ -27,7 +28,9 @@ class FlagSyncService(
             .setFlagConfiguration(flagsRepository.getFlagConfiguration())
             .build()
         emit(firstResult)
-        emitAll(flagsUpdateSubscriber.flow)
+        emitAll(flagsUpdateSubscriber.flow.map { flagConfiguration ->
+            SyncFlagsResponse.newBuilder().setFlagConfiguration(flagConfiguration).build()
+        })
     }
 
     override suspend fun fetchAllFlags(request: FetchAllFlagsRequest): FetchAllFlagsResponse {
