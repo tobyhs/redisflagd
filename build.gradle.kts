@@ -1,8 +1,8 @@
 import com.google.protobuf.gradle.id
 
-val grpcKotlinVersion = project.properties["grpcKotlinVersion"] as String
-val kotlinCoroutinesVersion = project.properties["kotlinCoroutinesVersion"] as String
-val kotlinVersion = project.properties["kotlinVersion"] as String
+val grpcKotlinVersion: String by project
+val kotlinCoroutinesVersion: String by project
+val kotlinVersion: String by project
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
