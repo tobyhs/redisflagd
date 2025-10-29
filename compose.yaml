@@ -4,6 +4,8 @@ services:
   redis:
     image: redis:7-alpine
     command: redis-server /redis_conf
+    ports:
+      - "${LOCAL_REDIS_PORT:-6379}:6379"
     configs:
       - redis_conf
 
