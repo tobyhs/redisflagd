@@ -19,7 +19,7 @@ services:
       REDIS_URI: redis://redis
 
   flagd:
-    image: ghcr.io/open-feature/flagd:v0.11.2
+    image: ghcr.io/open-feature/flagd:v0.12.9
     command: start --uri grpc://redisflagd:50051
     ports:
       - "8013:8013"
